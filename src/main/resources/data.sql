@@ -36,3 +36,4 @@ VALUES ('JOURNAL', 'Journal 2 Method 1', 'Research Team', '2024-01-01', TRUE, '0
 
 INSERT INTO library_items (item_type, title, author, publication_date, available, issn, publisher, volume, issue)
 VALUES ('JOURNAL', 'Paper 1 Method 1', 'Science Group', '2024-02-01', TRUE, '0036-8075', 'AAAS', 383, 6682);
+
