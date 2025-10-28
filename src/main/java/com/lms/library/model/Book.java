@@ -1,19 +1,6 @@
 package com.lms.library.model;
 
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 import java.time.LocalDate;
-
-@Entity
-@DiscriminatorValue("BOOK")
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 
 public final class Book extends LibraryItem {
 
@@ -21,12 +8,31 @@ public final class Book extends LibraryItem {
     private String genre;
     private int pageCount;
 
+    public Book() {}
+
     public Book(String title, String author, LocalDate publicationDate,
                 String isbn, String genre, int pageCount) {
+
+        if (pageCount <= 0) {
+            throw new IllegalArgumentException("Page count must be positive");
+        }
+
         super(title, author, publicationDate);
         this.isbn = isbn;
         this.genre = genre;
         this.pageCount = pageCount;
+    }
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public String getGenre() {
+        return genre;
+    }
+
+    public int getPageCount() {
+        return pageCount;
     }
 
     @Override

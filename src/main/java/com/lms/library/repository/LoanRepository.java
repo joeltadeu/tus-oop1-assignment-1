@@ -1,25 +1,44 @@
 package com.lms.library.repository;
 
 import com.lms.library.model.Loan;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Repository
-public interface LoanRepository extends JpaRepository<Loan, Long> {
+public class LoanRepository {
+    private static final Map<Long, Loan> STORE = new ConcurrentHashMap<>();
+    private static final AtomicLong ID_SEQ = new AtomicLong(1);
 
-    List<Loan> findByMemberIdOrderByLoanDateDesc(Long memberId);
+    public Loan save(Loan loan) {
+        if (loan.getId() == null) {
+            loan.setId(ID_SEQ.getAndIncrement());
+        }
+        STORE.put(loan.getId(), loan);
+        return loan;
+    }
 
-    @Query("SELECT l FROM Loan l JOIN FETCH l.member WHERE l.id = :id")
-    Optional<Loan> findByIdWithMember(@Param("id") Long id);
+    public Optional<Loan> findById(Long id) {
+        return Optional.ofNullable(STORE.get(id));
+    }
 
-    @Query("SELECT l FROM Loan l JOIN FETCH l.items i JOIN FETCH i.item WHERE l.id = :id")
-    Optional<Loan> findByIdWithItems(@Param("id") Long id);
+    public List<Loan> findByMemberIdOrderByLoanDateDesc(Long memberId) {
+        return STORE.values().stream()
+                .filter(l -> l.getMember().getId().equals(memberId))
+                .sorted(Comparator.comparing(Loan::getLoanDate).reversed())
+                .toList();
+    }
 
-    @Query("SELECT l FROM Loan l JOIN FETCH l.member JOIN FETCH l.items i JOIN FETCH i.item WHERE l.id = :id")
-    Optional<Loan> findByIdWithMemberAndItems(@Param("id") Long id);
+    public Optional<Loan> findByIdWithMemberAndItems(Long id) {
+        return findById(id); // no lazy loading needed
+    }
+
+    public Optional<Loan> findByIdWithItems(Long id) {
+        return findById(id);
+    }
 }

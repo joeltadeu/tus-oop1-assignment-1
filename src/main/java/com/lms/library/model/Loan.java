@@ -1,45 +1,52 @@
 package com.lms.library.model;
 
-import jakarta.persistence.*;
-import lombok.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name = "loans")
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 public class Loan {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
-
-    @Column(nullable = false)
     private LocalDate loanDate;
-
-    @Column(nullable = false)
     private LocalDate expectedReturnDate;
+    private LoanStatus status = LoanStatus.OPEN;
+    private final List<LoanItem> items = new ArrayList<>();
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private LoanStatus status;
-
-    @OneToMany(mappedBy = "loan", cascade = CascadeType.ALL, orphanRemoval = true)
-    @ToString.Exclude
-    private List<LoanItem> items = new ArrayList<>();
+    public Loan() {}
 
     public Loan(Member member, LocalDate loanDate, LocalDate expectedReturnDate) {
         this.member = member;
         this.loanDate = loanDate;
         this.expectedReturnDate = expectedReturnDate;
-        this.status = LoanStatus.OPEN;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Member getMember() {
+        return member;
+    }
+
+    public LocalDate getLoanDate() {
+        return loanDate;
+    }
+
+    public LocalDate getExpectedReturnDate() {
+        return expectedReturnDate;
+    }
+
+    public LoanStatus getStatus() {
+        return status;
+    }
+
+    public List<LoanItem> getItems() {
+        return List.copyOf(items);
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void addItem(LoanItem item) {

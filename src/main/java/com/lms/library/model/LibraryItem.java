@@ -1,42 +1,50 @@
 package com.lms.library.model;
 
-import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.Proxy;
-
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "library_items")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "item_type", discriminatorType = DiscriminatorType.STRING)
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class LibraryItem  {
+public sealed abstract class LibraryItem permits Book, Journal {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false)
     private String title;
-
-    @Column(nullable = false)
     private String author;
-
     private LocalDate publicationDate;
-
-    @Setter
-    @Column(nullable = false)
     private boolean available = true;
+
+    protected LibraryItem() {
+    }
 
     protected LibraryItem(String title, String author, LocalDate publicationDate) {
         this.title = title;
         this.author = author;
         this.publicationDate = publicationDate;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public LocalDate getPublicationDate() {
+        return publicationDate;
+    }
+
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
     }
 
     public abstract String getType();

@@ -1,22 +1,47 @@
 package com.lms.library.repository;
 
 import com.lms.library.model.LoanItem;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Repository
-public interface LoanItemRepository extends JpaRepository<LoanItem, Long> {
+public class LoanItemRepository {
 
-    List<LoanItem> findByLoanId(Long loanId);
+    private static final Logger log = LoggerFactory.getLogger(LoanItemRepository.class);
+    private static final Map<Long, LoanItem> STORE = new ConcurrentHashMap<>();
+    private static final AtomicLong ID_SEQ = new AtomicLong(1);
 
-    @Query("SELECT li FROM LoanItem li JOIN FETCH li.item WHERE li.loan.id = :loanId AND li.item.id = :itemId")
-    Optional<LoanItem> findByLoanIdAndItemId(@Param("loanId") Long id, @Param("itemId") Long itemId);
+    public LoanItem save(LoanItem item) {
+        if (item.getId() == null) {
+            item.setId(ID_SEQ.getAndIncrement());
+        }
+        STORE.put(item.getId(), item);
+        return item;
+    }
 
-    @Query("SELECT li FROM LoanItem li WHERE li.loan.id = :loanId AND li.returnedDate IS NULL")
-    List<LoanItem> findActiveItemsByLoanId(@Param("loanId") Long loanId);
+    public List<LoanItem> findByLoanId(Long loanId) {
+        return STORE.values().stream()
+                .filter(i -> i.getLoan().getId().equals(loanId))
+                .toList();
+    }
+
+    public Optional<LoanItem> findByLoanIdAndItemId(Long loanId, Long itemId) {
+        return STORE.values().stream()
+                .filter(i -> i.getLoan().getId().equals(loanId) &&
+                        i.getItem().getId().equals(itemId))
+                .findFirst();
+    }
+
+    public List<LoanItem> findActiveItemsByLoanId(Long loanId) {
+        return STORE.values().stream()
+                .filter(i -> i.getLoan().getId().equals(loanId) && !i.isReturned())
+                .toList();
+    }
 }

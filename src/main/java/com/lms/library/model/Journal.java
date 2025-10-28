@@ -1,26 +1,16 @@
 package com.lms.library.model;
 
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 import java.time.LocalDate;
 
-
-@Entity
-@DiscriminatorValue("JOURNAL")
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 public final class Journal extends LibraryItem {
 
     private String issn;
     private String publisher;
     private int volume;
     private int issue;
+
+    public Journal() {
+    }
 
     public Journal(String title, String author, LocalDate publicationDate,
                    String issn, String publisher, int volume, int issue) {
@@ -29,6 +19,22 @@ public final class Journal extends LibraryItem {
         this.publisher = publisher;
         this.volume = volume;
         this.issue = issue;
+    }
+
+    public String getIssn() {
+        return issn;
+    }
+
+    public String getPublisher() {
+        return publisher;
+    }
+
+    public int getVolume() {
+        return volume;
+    }
+
+    public int getIssue() {
+        return issue;
     }
 
     @Override

@@ -1,29 +1,32 @@
 package com.lms.library.controller;
 
 import com.lms.library.dto.*;
-import com.lms.library.exception.ItemCurrentlyLoanedException;
 import com.lms.library.model.Loan;
 import com.lms.library.model.LoanItem;
 import com.lms.library.service.LoanService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Slf4j
 @RestController
 @RequestMapping("/v1")
-@RequiredArgsConstructor
 public class LoanController {
 
+    private static final Logger log = LoggerFactory.getLogger(LoanController.class);
+
     private final LoanService loanService;
+
+    public LoanController(LoanService loanService) {
+        this.loanService = loanService;
+    }
 
     @PostMapping("/members/{memberId}/loans")
     public ResponseEntity<LoanResponse> checkoutItems(
             @PathVariable Long memberId,
-            @RequestBody LoanRequest loanRequest) throws ItemCurrentlyLoanedException {
+            @RequestBody LoanRequest loanRequest) {
 
         log.info("Checkout request for member {}: {} items", memberId, loanRequest.items().size());
         Loan loan = loanService.checkoutItems(memberId, loanRequest);
@@ -89,15 +92,8 @@ public class LoanController {
             @RequestBody(required = false) LoanRequest returnRequest) {
 
         log.info("Return request for loan {}", loanId);
-        Loan returnedLoan;
 
-        if (returnRequest != null && returnRequest.items() != null && !returnRequest.items().isEmpty()) {
-            // Return specific items
-            returnedLoan = loanService.returnItems(loanId, returnRequest.items());
-        } else {
-            // Return all items
-            returnedLoan = loanService.returnAllItems(loanId);
-        }
+        var returnedLoan = loanService.returnItems(loanId, returnRequest.items());
 
         // Convert to response
         List<LoanItemResponse> itemResponses = returnedLoan.getItems().stream()

@@ -1,0 +1,38 @@
+@startuml
+title Loan Checkout Sequence Diagram - Happy Path
+
+actor Client
+participant "LoanController" as Controller
+participant "LoanService" as Service
+participant "MemberRepository" as MemberRepo
+participant "LibraryItemRepository" as ItemRepo
+participant "LoanRepository" as LoanRepo
+
+Client -> Controller: POST /members/{memberId}/loans
+
+Controller -> Service: checkoutItems(memberId, loanRequest)
+
+Service -> MemberRepo: findById(memberId)
+MemberRepo --> Service: Member
+
+Service -> Service: calculateDueDate()
+Service -> Service: create Loan object
+
+loop For each itemId
+    Service -> ItemRepo: findAvailableItemById(itemId)
+    ItemRepo --> Service: LibraryItem
+    Service -> Service: markItemUnavailable(item)
+    Service -> ItemRepo: save(item)
+    Service -> Service: create LoanItem
+    Service -> Service: add item to loan
+end
+
+Service -> LoanRepo: save(loan)
+LoanRepo --> Service: saved Loan
+
+Service --> Controller: return saved Loan
+
+Controller -> Controller: convert items to response
+Controller -> Controller: create LoanResponse
+Controller --> Client: 200 OK with response
+@enduml
