@@ -7,7 +7,7 @@ participant "LoanService" as Service
 participant "LoanRepository" as LoanRepo
 participant "LoanItemRepository" as LoanItemRepo
 
-Client -> Controller: POST /v1/loans/{loanId}/returns\nwith item list
+Client -> Controller: POST /v1/loans/{loanId}/returns\n with item list
 Controller -> Service: returnItems(loanId, itemIds)
 
 Service -> LoanRepo: findByIdWithItems(loanId)

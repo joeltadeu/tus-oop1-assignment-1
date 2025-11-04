@@ -1,3 +1,12 @@
+/**
+ * Implementation of the LoanService interface.
+ * Provides business logic for loan operations including checkout, return, and retrieval.
+ *
+ * @author Joel Silva
+ * @version 1.0
+ * @see LoanService
+ * @since 2025
+ */
 package com.lms.library.service;
 
 import com.lms.library.dto.LoanRequest;
@@ -27,6 +36,14 @@ public class LoanServiceImpl implements LoanService {
     private final LoanRepository loanRepository;
     private final LoanItemRepository loanItemRepository;
 
+    /**
+     * Constructs a new LoanServiceImpl with required dependencies.
+     *
+     * @param memberRepository repository for member operations
+     * @param libraryItemRepository repository for library item operations
+     * @param loanRepository repository for loan operations
+     * @param loanItemRepository repository for loan item operations
+     */
     public LoanServiceImpl(MemberRepository memberRepository, LibraryItemRepository libraryItemRepository, LoanRepository loanRepository, LoanItemRepository loanItemRepository) {
         this.memberRepository = memberRepository;
         this.libraryItemRepository = libraryItemRepository;
@@ -34,6 +51,9 @@ public class LoanServiceImpl implements LoanService {
         this.loanItemRepository = loanItemRepository;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Loan checkoutItems(Long memberId, LoanRequest loanRequest) {
         Member member = memberRepository.findById(memberId)
@@ -66,6 +86,7 @@ public class LoanServiceImpl implements LoanService {
         }
 
         Loan savedLoan = loanRepository.save(loan);
+        loanItemRepository.saveAll(loan.getItems());
         member.addLoan(savedLoan);
         memberRepository.save(member);
 
@@ -75,6 +96,9 @@ public class LoanServiceImpl implements LoanService {
         return savedLoan;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Loan> getMemberLoans(Long memberId) {
         if (!memberRepository.existsById(memberId)) {
@@ -84,12 +108,18 @@ public class LoanServiceImpl implements LoanService {
         return loanRepository.findByMemberIdOrderByLoanDateDesc(memberId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Loan getLoanById(Long loanId) {
         return loanRepository.findByIdWithMemberAndItems(loanId)
                 .orElseThrow(() -> new LoanNotFoundException("Loan not found with ID: " + loanId));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Loan returnItems(Long loanId, List<Long> itemIds) {
         Loan loan = loanRepository.findByIdWithItems(loanId)

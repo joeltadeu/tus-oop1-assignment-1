@@ -1,3 +1,14 @@
+/**
+ * Repository class for managing LibraryItem entities.
+ * Provides data access operations for books and journals using an in-memory store.
+ *
+ * @author Joel Silva
+ * @version 1.0
+ * @see LibraryItem
+ * @see Book
+ * @see Journal
+ * @since 2025
+ */
 package com.lms.library.repository;
 
 import com.lms.library.model.Book;
@@ -23,6 +34,10 @@ public class LibraryItemRepository {
     private static final Map<Long, LibraryItem> STORE = new ConcurrentHashMap<>();
     private static final AtomicLong ID_SEQ = new AtomicLong(1);
 
+    /**
+     * Initializes the repository with sample data.
+     * Called automatically after dependency injection is complete.
+     */
     @PostConstruct
     public void init() {
         // --- Preload some Books ---
@@ -45,6 +60,13 @@ public class LibraryItemRepository {
         log.info("LibraryItemRepository initialized with {} items.", STORE.size());
     }
 
+    /**
+     * Saves a library item to the repository.
+     * If the item has no ID, generates a new one automatically.
+     *
+     * @param item the library item to save
+     * @return the saved library item with generated ID
+     */
     public LibraryItem save(LibraryItem item) {
         if (item.getId() == null) {
             item.setId(ID_SEQ.getAndIncrement());
@@ -53,30 +75,64 @@ public class LibraryItemRepository {
         return item;
     }
 
+    /**
+     * Finds a library item by its ID.
+     *
+     * @param id the ID of the item to find
+     * @return an Optional containing the found item, or empty if not found
+     */
     public Optional<LibraryItem> findById(Long id) {
         return Optional.ofNullable(STORE.get(id));
     }
 
+    /**
+     * Finds an available library item by its ID.
+     * Only returns items that are currently available for loan.
+     *
+     * @param id the ID of the item to find
+     * @return an Optional containing the available item, or empty if not found or unavailable
+     */
     public Optional<LibraryItem> findAvailableItemById(Long id) {
         return findById(id).filter(LibraryItem::isAvailable);
     }
 
+    /**
+     * Finds all available library items.
+     *
+     * @return a list of all available library items
+     */
     public List<LibraryItem> findAvailableItems() {
         return STORE.values().stream().filter(LibraryItem::isAvailable).toList();
     }
 
+    /**
+     * Finds library items by title (case-insensitive partial match).
+     *
+     * @param title the title or partial title to search for
+     * @return a list of items whose titles contain the search string
+     */
     public List<LibraryItem> findByTitleContainingIgnoreCase(String title) {
         return STORE.values().stream()
                 .filter(i -> i.getTitle().toLowerCase().contains(title.toLowerCase()))
                 .toList();
     }
 
+    /**
+     * Finds all available books.
+     *
+     * @return a list of all available Book instances
+     */
     public List<LibraryItem> findAvailableBooks() {
         return STORE.values().stream()
                 .filter(i -> i instanceof Book && i.isAvailable())
                 .toList();
     }
 
+    /**
+     * Finds all available journals.
+     *
+     * @return a list of all available Journal instances
+     */
     public List<LibraryItem> findAvailableJournals() {
         return STORE.values().stream()
                 .filter(i -> i instanceof Journal && i.isAvailable())

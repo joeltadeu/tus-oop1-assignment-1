@@ -1,10 +1,33 @@
+spring:
+  application:
+    name: Library Management System
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+# OpenAPI Configuration
+springdoc:
+  api-docs:
+    path: /api-docs
+    groups:
+      enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+    tagsSorter: alpha
+    disable-swagger-default-url: true
+
+# Logging Configuration
 logging:
   level:
     org.hibernate.SQL: DEBUG
     org.hibernate.orm.jdbc.bind: TRACE
     com.lms.library: DEBUG
     org.springframework.jdbc.datasource.init.ScriptUtils: DEBUG
+    org.springdoc: INFO
 
-
-
-
+# Server Configuration (optional - add if needed)
+server:
+  port: 8080
+  servlet:
+    context-path: /
