@@ -1,25 +1,86 @@
+/**
+ * Repository class for managing Loan entities.
+ * Provides data access operations for loans using an in-memory store.
+ *
+ * @author Joel Silva
+ * @version 1.0
+ * @see Loan
+ * @since 2025
+ */
 package com.lms.library.repository;
 
 import com.lms.library.model.Loan;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Repository
-public interface LoanRepository extends JpaRepository<Loan, Long> {
+public class LoanRepository {
+    private static final Map<Long, Loan> STORE = new ConcurrentHashMap<>();
+    private static final AtomicLong ID_SEQ = new AtomicLong(1);
 
-    List<Loan> findByMemberIdOrderByLoanDateDesc(Long memberId);
+    /**
+     * Saves a loan to the repository.
+     * If the loan has no ID, generates a new one automatically.
+     *
+     * @param loan the loan to save
+     * @return the saved loan with generated ID
+     */
+    public Loan save(Loan loan) {
+        if (loan.getId() == null) {
+            loan.setId(ID_SEQ.getAndIncrement());
+        }
+        STORE.put(loan.getId(), loan);
+        return loan;
+    }
 
-    @Query("SELECT l FROM Loan l JOIN FETCH l.member WHERE l.id = :id")
-    Optional<Loan> findByIdWithMember(@Param("id") Long id);
+    /**
+     * Finds a loan by its ID.
+     *
+     * @param id the ID of the loan to find
+     * @return an Optional containing the found loan, or empty if not found
+     */
+    public Optional<Loan> findById(Long id) {
+        return Optional.ofNullable(STORE.get(id));
+    }
 
-    @Query("SELECT l FROM Loan l JOIN FETCH l.items i JOIN FETCH i.item WHERE l.id = :id")
-    Optional<Loan> findByIdWithItems(@Param("id") Long id);
+    /**
+     * Finds all loans for a specific member, ordered by loan date (newest first).
+     *
+     * @param memberId the ID of the member
+     * @return a list of loans for the member, sorted by loan date descending
+     */
+    public List<Loan> findByMemberIdOrderByLoanDateDesc(Long memberId) {
+        return STORE.values().stream()
+                .filter(l -> l.getMember().getId().equals(memberId))
+                .sorted(Comparator.comparing(Loan::getLoanDate).reversed())
+                .toList();
+    }
 
-    @Query("SELECT l FROM Loan l JOIN FETCH l.member JOIN FETCH l.items i JOIN FETCH i.item WHERE l.id = :id")
-    Optional<Loan> findByIdWithMemberAndItems(@Param("id") Long id);
+    /**
+     * Finds a loan by ID including member and items information.
+     * In this in-memory implementation, equivalent to findById.
+     *
+     * @param id the ID of the loan to find
+     * @return an Optional containing the found loan with member and items, or empty if not found
+     */
+    public Optional<Loan> findByIdWithMemberAndItems(Long id) {
+        return findById(id); // no lazy loading needed
+    }
+
+    /**
+     * Finds a loan by ID including items information.
+     * In this in-memory implementation, equivalent to findById.
+     *
+     * @param id the ID of the loan to find
+     * @return an Optional containing the found loan with items, or empty if not found
+     */
+    public Optional<Loan> findByIdWithItems(Long id) {
+        return findById(id);
+    }
 }

@@ -1,0 +1,24 @@
+@startuml
+title Get Member Loans Sequence Diagram
+
+actor Client
+participant "LoanController" as Controller
+participant "LoanService" as Service
+participant "MemberRepository" as MemberRepo
+participant "LoanRepository" as LoanRepo
+
+Client -> Controller: GET /v1/members/{memberId}/loans
+Controller -> Service: getMemberLoans(memberId)
+
+Service -> MemberRepo: existsById(memberId)
+MemberRepo --> Service: true
+
+Service -> LoanRepo: findByMemberIdOrderByLoanDateDesc(memberId)
+LoanRepo --> Service: List<Loan>
+
+Service --> Controller: return loans
+
+Controller -> Controller: convert loans to LoanSummaryResponse
+Controller -> Controller: create response list
+Controller --> Client: 200 OK with List<LoanSummaryResponse>
+@enduml

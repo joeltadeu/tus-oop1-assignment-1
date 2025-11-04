@@ -1,0 +1,21 @@
+@startuml SimpleArchitecture
+skinparam componentStyle uml2
+left to right direction
+
+component "Controller" as A
+component "Service" as B
+component "Repository" as C
+component "In-Memory Storage" as D
+database "Data in Memory \n   (Static Maps)" as E
+
+A -right-> B : "                 calls"
+B -right-> C : "                 uses"
+C -right-> D : "                   access"
+D -right-> E : "                                  stores/retrieves"
+
+note right of D
+  Thread-safe in-memory
+  storage using Java
+  Collections
+end note
+@enduml

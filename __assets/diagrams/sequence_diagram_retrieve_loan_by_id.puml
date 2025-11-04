@@ -1,0 +1,21 @@
+@startuml
+title Get Loan Details Sequence Diagram
+
+actor Client
+participant "LoanController" as Controller
+participant "LoanService" as Service
+participant "LoanRepository" as Repository
+
+Client -> Controller: GET /v1/loans/{loanId}
+Controller -> Controller: log fetching loan details
+Controller -> Service: getLoanById(loanId)
+
+Service -> Repository: findByIdWithMemberAndItems(loanId)
+Repository --> Service: Loan (with member and items)
+
+Service --> Controller: return loan
+
+Controller -> Controller: convert items to LoanItemResponse
+Controller -> Controller: create LoanResponse
+Controller --> Client: 200 OK with LoanResponse
+@enduml

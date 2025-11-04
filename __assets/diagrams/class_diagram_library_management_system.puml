@@ -1,0 +1,112 @@
+@startuml
+left to right direction
+
+enum LoanStatus {
+    OPEN
+    CLOSED
+}
+
+package "Library Items" {
+    left to right direction
+    abstract class LibraryItem {
+        - Long id
+        - String title
+        - String author
+        - LocalDate publicationDate
+        - boolean available
+        + Long getId()
+        + String getTitle()
+        + String getAuthor()
+        + LocalDate getPublicationDate()
+        + boolean isAvailable()
+        + void setId(Long id)
+        + void setAvailable(boolean available)
+        + abstract String getType()
+    }
+
+    class Book {
+        - String isbn
+        - String genre
+        - int pageCount
+        + String getIsbn()
+        + String getGenre()
+        + int getPageCount()
+        + String getType()
+    }
+
+    class Journal {
+        - String issn
+        - String publisher
+        - int volume
+        - int issue
+        + String getIssn()
+        + String getPublisher()
+        + int getVolume()
+        + int getIssue()
+        + String getType()
+    }
+
+    LibraryItem <|-- Book
+    LibraryItem <|-- Journal
+}
+
+package "Members" {
+ top to bottom direction
+ class Member {
+        - Long id
+        - String firstName
+        - String lastName
+        - String email
+        - List<Loan> loans
+        + Long getId()
+        + String getFirstName()
+        + String getLastName()
+        + String getEmail()
+        + List<Loan> getLoans()
+        + void addLoan(Loan loan)
+    }
+}
+
+package "Loans" {
+    left to right direction
+
+
+    class Loan {
+        - Long id
+        - Member member
+        - LocalDate loanDate
+        - LocalDate expectedReturnDate
+        - LoanStatus status
+        - List<LoanItem> items
+        + Long getId()
+        + Member getMember()
+        + LocalDate getLoanDate()
+        + LocalDate getExpectedReturnDate()
+        + LoanStatus getStatus()
+        + List<LoanItem> getItems()
+        + void addItem(LoanItem item)
+        + void updateStatus()
+    }
+
+    class LoanItem {
+        - Long id
+        - Loan loan
+        - LibraryItem item
+        - LocalDate returnedDate
+        + Long getId()
+        + Loan getLoan()
+        + LibraryItem getItem()
+        + LocalDate getReturnedDate()
+        + boolean isReturned()
+        + void markReturned()
+    }
+
+    Member "1" --> "0..*" Loan
+    Loan "1" --> "1..*" LoanItem
+    LoanItem "1" --> "1" LibraryItem
+    Loan --> LoanStatus
+}
+
+
+
+@enduml

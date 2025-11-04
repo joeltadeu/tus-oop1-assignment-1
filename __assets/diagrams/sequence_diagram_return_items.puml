@@ -1,0 +1,32 @@
+@startuml
+title Return Loan Items Sequence Diagram
+
+actor Client
+participant "LoanController" as Controller
+participant "LoanService" as Service
+participant "LoanRepository" as LoanRepo
+participant "LoanItemRepository" as LoanItemRepo
+
+Client -> Controller: POST /v1/loans/{loanId}/returns\n with item list
+Controller -> Service: returnItems(loanId, itemIds)
+
+Service -> LoanRepo: findByIdWithItems(loanId)
+LoanRepo --> Service: Loan
+
+loop For each itemId in itemIds
+    Service -> LoanItemRepo: findByLoanIdAndItemId(loanId, itemId)
+    LoanItemRepo --> Service: LoanItem
+    Service -> Service: markReturned()
+    Service -> LoanItemRepo: save(loanItem)
+end
+
+Service -> Service: updateLoanStatus()
+Service -> LoanRepo: save(loan)
+LoanRepo --> Service: updated Loan
+
+Service --> Controller: return updated Loan
+
+Controller -> Controller: convert items to response
+Controller -> Controller: create LoanResponse
+Controller --> Client: 200 OK with updated LoanResponse
+@enduml

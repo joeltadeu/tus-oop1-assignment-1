@@ -1,13 +1,20 @@
+/**
+ * Main application class for the Library Management System.
+ * Bootstraps the Spring Boot application.
+ *
+ * @author Joel Silva
+ * @version 1.0
+ * @since 2025
+ */
 package com.lms.library;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class Application {
+class Application {
 
-    public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+    void main() {
+        SpringApplication.run(Application.class);
     }
-
 }
