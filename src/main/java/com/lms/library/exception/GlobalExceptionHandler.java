@@ -1,12 +1,3 @@
-/**
- * Global exception handler for the Library Management System.
- * Provides centralized exception handling and standardized error responses for REST APIs.
- *
- * @author Joel Silva
- * @version 1.0
- * @since 2025
- */
-
 package com.lms.library.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,10 +8,24 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+/**
+ * Global exception handler for the Library Management System.
+ * Provides centralized exception handling and standardized error responses for REST APIs.
+ *
+ * @author Joel Silva
+ * @version 1.0
+ * @since 2025
+ */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
+    /**
+     * Default constructor for GlobalExceptionHandler.
+     */
+    public GlobalExceptionHandler() {
+    }
 
     /**
      * Handles resource not found exceptions (Member, Item, Loan not found).

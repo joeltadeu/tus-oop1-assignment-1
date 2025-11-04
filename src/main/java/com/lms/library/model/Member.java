@@ -1,3 +1,7 @@
+package com.lms.library.model;
+
+import java.util.*;
+
 /**
  * Represents a library member who can borrow items.
  * Contains personal information and maintains a list of current and past loans.
@@ -7,10 +11,6 @@
  * @see Loan
  * @since 2025
  */
-package com.lms.library.model;
-
-import java.util.*;
-
 public class Member {
 
     private Long id;

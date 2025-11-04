@@ -1,3 +1,7 @@
+package com.lms.library.model;
+
+import java.time.LocalDate;
+
 /**
  * Represents an individual item within a loan.
  * Links a specific library item to a loan and tracks its return status.
@@ -8,10 +12,6 @@
  * @see LibraryItem
  * @since 2025
  */
-package com.lms.library.model;
-
-import java.time.LocalDate;
-
 public class LoanItem {
 
     private Long id;

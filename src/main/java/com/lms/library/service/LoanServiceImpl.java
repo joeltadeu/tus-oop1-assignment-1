@@ -1,12 +1,3 @@
-/**
- * Implementation of the LoanService interface.
- * Provides business logic for loan operations including checkout, return, and retrieval.
- *
- * @author Joel Silva
- * @version 1.0
- * @see LoanService
- * @since 2025
- */
 package com.lms.library.service;
 
 import com.lms.library.dto.LoanRequest;
@@ -26,6 +17,15 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Implementation of the LoanService interface.
+ * Provides business logic for loan operations including checkout, return, and retrieval.
+ *
+ * @author Joel Silva
+ * @version 1.0
+ * @see LoanService
+ * @since 2025
+ */
 @Service
 public class LoanServiceImpl implements LoanService {
 

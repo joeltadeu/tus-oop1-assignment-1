@@ -1,3 +1,7 @@
+package com.lms.library.model;
+
+import java.time.LocalDate;
+
 /**
  * Represents a journal in the library system.
  * Extends LibraryItem and contains journal-specific properties like ISSN, publisher, volume, and issue.
@@ -7,10 +11,6 @@
  * @see LibraryItem
  * @since 2025
  */
-package com.lms.library.model;
-
-import java.time.LocalDate;
-
 public final class Journal extends LibraryItem {
 
     private String issn;

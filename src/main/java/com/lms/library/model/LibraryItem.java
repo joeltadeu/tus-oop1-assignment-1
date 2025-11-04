@@ -1,3 +1,7 @@
+package com.lms.library.model;
+
+import java.time.LocalDate;
+
 /**
  * Abstract base class representing a library item.
  * Serves as the parent class for all library items like books and journals.
@@ -9,10 +13,6 @@
  * @see Journal
  * @since 2025
  */
-package com.lms.library.model;
-
-import java.time.LocalDate;
-
 public sealed abstract class LibraryItem permits Book, Journal {
 
     private Long id;

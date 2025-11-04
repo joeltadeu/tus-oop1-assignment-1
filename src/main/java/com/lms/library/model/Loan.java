@@ -1,3 +1,9 @@
+package com.lms.library.model;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Represents a loan transaction in the library system.
  * Contains information about the member, loan dates, status, and items being borrowed.
@@ -9,12 +15,6 @@
  * @see LoanStatus
  * @since 2025
  */
-package com.lms.library.model;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
 public class Loan {
 
     private Long id;

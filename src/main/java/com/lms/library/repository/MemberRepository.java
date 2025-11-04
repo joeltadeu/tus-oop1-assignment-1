@@ -1,12 +1,3 @@
-/**
- * Repository class for managing Member entities.
- * Provides data access operations for library members using an in-memory store.
- *
- * @author Joel Silva
- * @version 1.0
- * @see Member
- * @since 2025
- */
 package com.lms.library.repository;
 
 import com.lms.library.model.Member;
@@ -20,11 +11,26 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
+/**
+ * Repository class for managing Member entities.
+ * Provides data access operations for library members using an in-memory store.
+ *
+ * @author Joel Silva
+ * @version 1.0
+ * @see Member
+ * @since 2025
+ */
 @Repository
 public class MemberRepository {
     private static final Logger log = LoggerFactory.getLogger(MemberRepository.class);
     private static final Map<Long, Member> STORE = new ConcurrentHashMap<>();
     private static final AtomicLong ID_SEQ = new AtomicLong(1);
+
+    /**
+     * Default constructor for MemberRepository.
+     */
+    public MemberRepository() {
+    }
 
     /**
      * Initializes the repository with sample members.

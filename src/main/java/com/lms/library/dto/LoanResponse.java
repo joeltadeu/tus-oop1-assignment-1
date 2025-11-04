@@ -1,3 +1,10 @@
+package com.lms.library.dto;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
+import java.time.LocalDate;
+import java.util.List;
+
 /**
  * Data Transfer Object for detailed loan responses.
  * Contains complete information about a loan including all items.
@@ -8,17 +15,10 @@
  * @param expectedReturnDate the expected return date for the items
  * @param items the list of items in the loan
  * @param status the current status of the loan (OPEN or CLOSED)
- * @authorJoel Silva
+ * @author Joel Silva
  * @version 1.0
  * @since 2025
  */
-package com.lms.library.dto;
-
-import io.swagger.v3.oas.annotations.media.Schema;
-
-import java.time.LocalDate;
-import java.util.List;
-
 @Schema(description = "Response containing loan details")
 public record LoanResponse(
         @Schema(description = "Unique identifier of the loan", example = "123")

@@ -1,11 +1,3 @@
-/**
- * Configuration class for OpenAPI/Swagger documentation.
- * Configures API documentation settings and schema mappings.
- *
- * @author Joel Silva
- * @version 1.0
- * @since 2025
- */
 package com.lms.library.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
@@ -20,6 +12,14 @@ import org.springframework.context.annotation.Configuration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Configuration class for OpenAPI/Swagger documentation.
+ * Configures API documentation settings and schema mappings.
+ *
+ * @author Joel Silva
+ * @version 1.0
+ * @since 2025
+ */
 @OpenAPIDefinition(
         info = @Info(
                 title = "Library Management System API",
@@ -43,6 +43,13 @@ import java.time.format.DateTimeFormatter;
 )
 @Configuration
 public class OpenApiConfig {
+
+    /**
+     * Default constructor for OpenApiConfig.
+     */
+    public OpenApiConfig() {
+    }
+
     static {
         SpringDocUtils.getConfig().replaceWithSchema(LocalDate.class,
                 new Schema<LocalDate>()

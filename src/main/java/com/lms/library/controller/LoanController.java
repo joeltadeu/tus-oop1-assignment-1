@@ -1,12 +1,3 @@
-/**
- * REST controller for managing loan operations in the Library Management System.
- * Provides endpoints for checking out items, returning items, and retrieving loan information.
- *
- * @author Joel Silva
- * @version 1.0
- * @since 2025
- */
-
 package com.lms.library.controller;
 
 import com.lms.library.dto.LoanItemResponse;
@@ -30,6 +21,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * REST controller for managing loan operations in the Library Management System.
+ * Provides endpoints for checking out items, returning items, and retrieving loan information.
+ *
+ * @author Joel Silva
+ * @version 1.0
+ * @since 2025
+ */
 @RestController
 @RequestMapping("/v1")
 @Tag(name = "Loan Management", description = "APIs for managing book loans and returns")
@@ -39,6 +38,11 @@ public class LoanController {
 
     private final LoanService loanService;
 
+    /**
+     * Constructs a new LoanController with the required LoanService.
+     *
+     * @param loanService the loan service to be used by the controller
+     */
     public LoanController(LoanService loanService) {
         this.loanService = loanService;
     }

@@ -1,3 +1,9 @@
+package com.lms.library.dto;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
+import java.time.LocalDate;
+
 /**
  * Data Transfer Object for loan summary responses.
  * Contains basic information about a loan without item details.
@@ -10,12 +16,6 @@
  * @version 1.0
  * @since 2025
  */
-package com.lms.library.dto;
-
-import io.swagger.v3.oas.annotations.media.Schema;
-
-import java.time.LocalDate;
-
 @Schema(description = "Summary of a loan")
 public record LoanSummaryResponse(
         @Schema(description = "Unique identifier of the loan", example = "123")

@@ -1,12 +1,3 @@
-/**
- * Repository class for managing Loan entities.
- * Provides data access operations for loans using an in-memory store.
- *
- * @author Joel Silva
- * @version 1.0
- * @see Loan
- * @since 2025
- */
 package com.lms.library.repository;
 
 import com.lms.library.model.Loan;
@@ -19,10 +10,25 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
+/**
+ * Repository class for managing Loan entities.
+ * Provides data access operations for loans using an in-memory store.
+ *
+ * @author Joel Silva
+ * @version 1.0
+ * @see Loan
+ * @since 2025
+ */
 @Repository
 public class LoanRepository {
     private static final Map<Long, Loan> STORE = new ConcurrentHashMap<>();
     private static final AtomicLong ID_SEQ = new AtomicLong(1);
+
+    /**
+     * Default constructor for LoanRepository.
+     */
+    public LoanRepository() {
+    }
 
     /**
      * Saves a loan to the repository.

@@ -1,3 +1,5 @@
+package com.lms.library.exception;
+
 /**
  * Exception thrown when a requested item is not found in the system.
  *
@@ -5,8 +7,6 @@
  * @version 1.0
  * @since 2025
  */
-package com.lms.library.exception;
-
 public class ItemNotFoundException extends RuntimeException {
 
     /**

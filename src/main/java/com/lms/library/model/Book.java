@@ -1,3 +1,7 @@
+package com.lms.library.model;
+
+import java.time.LocalDate;
+
 /**
  * Represents a book in the library system.
  * Extends LibraryItem and contains book-specific properties like ISBN, genre, and page count.
@@ -7,10 +11,6 @@
  * @see LibraryItem
  * @since 2025
  */
-package com.lms.library.model;
-
-import java.time.LocalDate;
-
 public final class Book extends LibraryItem {
 
     private String isbn;

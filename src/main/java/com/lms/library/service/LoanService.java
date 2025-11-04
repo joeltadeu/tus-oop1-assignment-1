@@ -1,12 +1,3 @@
-/**
- * Service interface for loan management operations.
- * Defines the contract for loan-related business logic.
- *
- * @author Joel Silva
- * @version 1.0
- * @see LoanServiceImpl
- * @since 2025
- */
 package com.lms.library.service;
 
 import com.lms.library.dto.LoanRequest;
@@ -18,6 +9,15 @@ import com.lms.library.model.*;
 
 import java.util.List;
 
+/**
+ * Service interface for loan management operations.
+ * Defines the contract for loan-related business logic.
+ *
+ * @author Joel Silva
+ * @version 1.0
+ * @see LoanServiceImpl
+ * @since 2025
+ */
 public interface LoanService {
     /**
      * Checks out items for a member, creating a new loan.

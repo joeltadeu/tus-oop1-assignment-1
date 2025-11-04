@@ -1,14 +1,3 @@
-/**
- * Repository class for managing LibraryItem entities.
- * Provides data access operations for books and journals using an in-memory store.
- *
- * @author Joel Silva
- * @version 1.0
- * @see LibraryItem
- * @see Book
- * @see Journal
- * @since 2025
- */
 package com.lms.library.repository;
 
 import com.lms.library.model.Book;
@@ -26,6 +15,17 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
+/**
+ * Repository class for managing LibraryItem entities.
+ * Provides data access operations for books and journals using an in-memory store.
+ *
+ * @author Joel Silva
+ * @version 1.0
+ * @see LibraryItem
+ * @see Book
+ * @see Journal
+ * @since 2025
+ */
 @Repository
 public class LibraryItemRepository {
 
@@ -33,6 +33,12 @@ public class LibraryItemRepository {
 
     private static final Map<Long, LibraryItem> STORE = new ConcurrentHashMap<>();
     private static final AtomicLong ID_SEQ = new AtomicLong(1);
+
+    /**
+     * Default constructor for LibraryItemRepository.
+     */
+    public LibraryItemRepository() {
+    }
 
     /**
      * Initializes the repository with sample data.
