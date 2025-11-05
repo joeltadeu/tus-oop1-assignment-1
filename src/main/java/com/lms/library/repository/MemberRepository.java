@@ -67,7 +67,8 @@ public class MemberRepository {
      * @return an Optional containing the found member, or empty if not found
      */
     public Optional<Member> findById(Long id) {
-        return Optional.ofNullable(STORE.get(id));
+        return Optional.ofNullable(id)
+                .map(STORE::get);
     }
 
     /**
@@ -89,6 +90,8 @@ public class MemberRepository {
      * @return true if a member exists with the given ID, false otherwise
      */
     public boolean existsById(Long id) {
-        return STORE.containsKey(id);
+        return Optional.ofNullable(id)
+                .map(STORE::containsKey)
+                .orElse(false);
     }
 }

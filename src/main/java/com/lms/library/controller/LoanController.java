@@ -232,7 +232,7 @@ public class LoanController {
     @PostMapping("/loans/{loanId}/returns")
     public ResponseEntity<LoanResponse> returnItems(
             @PathVariable Long loanId,
-            @RequestBody(required = false) LoanRequest returnRequest) {
+            @RequestBody LoanRequest returnRequest) {
 
         log.info("Return request for loan {}", loanId);
 

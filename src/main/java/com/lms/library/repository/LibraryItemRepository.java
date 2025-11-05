@@ -88,7 +88,8 @@ public class LibraryItemRepository {
      * @return an Optional containing the found item, or empty if not found
      */
     public Optional<LibraryItem> findById(Long id) {
-        return Optional.ofNullable(STORE.get(id));
+        return Optional.ofNullable(id)
+                .map(STORE::get);
     }
 
     /**

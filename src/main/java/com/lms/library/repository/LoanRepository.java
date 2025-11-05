@@ -52,7 +52,8 @@ public class LoanRepository {
      * @return an Optional containing the found loan, or empty if not found
      */
     public Optional<Loan> findById(Long id) {
-        return Optional.ofNullable(STORE.get(id));
+        return Optional.ofNullable(id)
+                .map(STORE::get);
     }
 
     /**
