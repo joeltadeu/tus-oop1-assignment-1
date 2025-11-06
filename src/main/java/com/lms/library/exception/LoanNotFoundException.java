@@ -9,12 +9,12 @@ package com.lms.library.exception;
  */
 public class LoanNotFoundException extends RuntimeException {
 
-    /**
-     * Constructs a new LoanNotFoundException with the specified detail message.
-     *
-     * @param message the detail message explaining which loan was not found
-     */
-    public LoanNotFoundException(String message) {
-        super(message);
-    }
+  /**
+   * Constructs a new LoanNotFoundException with the specified detail message.
+   *
+   * @param message the detail message explaining which loan was not found
+   */
+  public LoanNotFoundException(String message) {
+    super(message);
+  }
 }

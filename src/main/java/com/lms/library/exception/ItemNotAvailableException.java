@@ -9,12 +9,12 @@ package com.lms.library.exception;
  */
 public class ItemNotAvailableException extends RuntimeException {
 
-    /**
-     * Constructs a new ItemNotAvailableException with the specified detail message.
-     *
-     * @param message the detail message explaining why the item is not available
-     */
-    public ItemNotAvailableException(String message) {
-        super(message);
-    }
+  /**
+   * Constructs a new ItemNotAvailableException with the specified detail message.
+   *
+   * @param message the detail message explaining why the item is not available
+   */
+  public ItemNotAvailableException(String message) {
+    super(message);
+  }
 }

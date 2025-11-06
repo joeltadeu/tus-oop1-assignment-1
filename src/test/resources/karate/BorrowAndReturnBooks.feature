@@ -5,6 +5,7 @@ Feature: Borrow and return books flow for member 1
     * url baseUrl
     * header Content-Type = 'application/json'
 
+  @library-management
   Scenario: Borrow items, save loan id, return items, assert closed + returnedDate set
     # 1) Borrow books
     Given path 'v1', 'members', 1, 'loans'
@@ -37,6 +38,7 @@ Feature: Borrow and return books flow for member 1
     And match response.status == 'CLOSED'
     And match each response.items[*].returnedDate == '#notnull'
 
+  @library-management
   Scenario: Partial return flow - borrow items 3 and 5, return item 3, then item 5
     # 1) Borrow books with ids 3 and 5
     Given path 'v1', 'members', 1, 'loans'

@@ -12,49 +12,37 @@ import org.springdoc.core.utils.SpringDocUtils;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Configuration class for OpenAPI/Swagger documentation.
- * Configures API documentation settings and schema mappings.
+ * Configuration class for OpenAPI/Swagger documentation. Configures API documentation settings and
+ * schema mappings.
  *
  * @author Joel Silva
  * @version 1.0
  * @since 2025
  */
 @OpenAPIDefinition(
-        info = @Info(
-                title = "Library Management System API",
-                version = "1.0.0",
-                description = "REST API for managing library operations including book checkout, returns, and member management",
-                contact = @Contact(
-                        name = "Library Support",
-                        email = "joeltadeu@gmail.com"
-                ),
-                license = @License(
-                        name = "Apache 2.0",
-                        url = "https://www.apache.org/licenses/LICENSE-2.0"
-                )
-        ),
-        servers = {
-                @Server(
-                        url = "http://localhost:8080",
-                        description = "Development Server"
-                )
-        }
-)
+    info =
+        @Info(
+            title = "Library Management System API",
+            version = "1.0.0",
+            description =
+                "REST API for managing library operations including book checkout, returns, and member management",
+            contact = @Contact(name = "Library Support", email = "joeltadeu@gmail.com"),
+            license =
+                @License(name = "Apache 2.0", url = "https://www.apache.org/licenses/LICENSE-2.0")),
+    servers = {@Server(url = "http://localhost:8080", description = "Development Server")})
 @Configuration
 public class OpenApiConfig {
 
-    /**
-     * Default constructor for OpenApiConfig.
-     */
-    public OpenApiConfig() {
-    }
+  /** Default constructor for OpenApiConfig. */
+  public OpenApiConfig() {}
 
-    static {
-        SpringDocUtils.getConfig().replaceWithSchema(LocalDate.class,
-                new Schema<LocalDate>()
-                        .type("string")
-                        .format("date")
-                        .example(LocalDate.now().format(DateTimeFormatter.ISO_DATE))
-        );
-    }
+  static {
+    SpringDocUtils.getConfig()
+        .replaceWithSchema(
+            LocalDate.class,
+            new Schema<LocalDate>()
+                .type("string")
+                .format("date")
+                .example(LocalDate.now().format(DateTimeFormatter.ISO_DATE)));
+  }
 }

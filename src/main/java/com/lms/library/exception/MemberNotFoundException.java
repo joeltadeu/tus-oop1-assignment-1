@@ -9,12 +9,12 @@ package com.lms.library.exception;
  */
 public class MemberNotFoundException extends RuntimeException {
 
-    /**
-     * Constructs a new MemberNotFoundException with the specified detail message.
-     *
-     * @param message the detail message explaining which member was not found
-     */
-    public MemberNotFoundException(String message) {
-        super(message);
-    }
+  /**
+   * Constructs a new MemberNotFoundException with the specified detail message.
+   *
+   * @param message the detail message explaining which member was not found
+   */
+  public MemberNotFoundException(String message) {
+    super(message);
+  }
 }

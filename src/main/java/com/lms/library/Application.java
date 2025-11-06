@@ -4,8 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * Main application class for the Library Management System.
- * Bootstraps the Spring Boot application.
+ * Main application class for the Library Management System. Bootstraps the Spring Boot application.
  *
  * @author Joel Silva
  * @version 1.0
@@ -14,13 +13,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class Application {
 
-    /**
-     * Default constructor for Application.
-     * Required for serialization and dependency injection frameworks.
-     */
-    Application() {}
+  /**
+   * Default constructor for Application. Required for serialization and dependency injection
+   * frameworks.
+   */
+  Application() {}
 
-    void main() {
-        SpringApplication.run(Application.class);
-    }
+  void main() {
+    SpringApplication.run(Application.class);
+  }
 }

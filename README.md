@@ -326,5 +326,54 @@ http://localhost:8080/v1
 
 ---
 
+## ✅ Tests
+
+This project includes both unit tests and integration tests using Karate DSL to ensure correctness and reliability of the Library Management Service.
+
+---
+
+
+### 🧪 Unit Tests
+Unit tests validate the behavior of individual components such as services and repositories. They are written using JUnit 5 and cover core business logic like loan creation, item return, and exception handling.
+
+#### ▶️ Run Unit Tests
+
+```bash'
+mvn test
+```
+This command will execute all unit tests located in the `src/test/java` directory. Results will be displayed in the console and stored in the target/surefire-reports folder.
+
+### 🥋 Integration Tests with Karate DSL
+
+Karate is a powerful DSL for testing REST APIs. It allows you to write expressive, scenario-based tests that validate the full request/response lifecycle.
+
+#### 📌 Goals of Karate Tests
+- Verify end-to-end flows for borrowing and returning items.
+- Ensure the API behaves correctly under different conditions.
+- Simulate real-world usage with dynamic data and assertions.
+
+#### 🧾 Covered Scenarios
+- Full Borrow and Return Flow Borrow items, save loan ID, return items, assert loan is closed and returnedDate is set.
+- Partial Return Flow Borrow items 3 and 5, return item 3, then item 5 — validating intermediate loan states.
+
+#### ▶️ Run Karate Tests
+
+```bash
+mvn -Dtest=com.lms.library.karate.BorrowAndReturnBooksTest test
+```
+
+This command runs the Karate feature file located at `classpath:karate/BorrowAndReturnBooks.feature`.
+
+#### 📊 View Test Report
+
+After execution, a detailed HTML report is generated at:
+```
+target/karate-reports/karate-summary.html
+```
+
+This report includes scenario results, request/response logs, and assertion outcomes.
+
+---
+
 ## 🧾 License
 This project is for educational and demonstration purposes — showing **clean architecture, Java 25 features, and OOP principles** in a Spring Boot REST API.
