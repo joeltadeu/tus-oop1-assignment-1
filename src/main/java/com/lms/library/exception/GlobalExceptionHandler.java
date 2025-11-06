@@ -42,7 +42,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiError> handleNotFoundExceptions(
             RuntimeException ex, HttpServletRequest request) {
         log.warn("Resource not found: {}", ex.getMessage());
-        ApiError apiError = new ApiError(
+        var apiError = new ApiError(
                 HttpStatus.NOT_FOUND.value(),
                 HttpStatus.NOT_FOUND.getReasonPhrase(),
                 ex.getMessage(),
@@ -62,7 +62,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiError> handleItemNotAvailable(
             ItemNotAvailableException ex, HttpServletRequest request) {
         log.warn("Item not available: {}", ex.getMessage());
-        ApiError apiError = new ApiError(
+        var apiError = new ApiError(
                 HttpStatus.CONFLICT.value(),
                 HttpStatus.CONFLICT.getReasonPhrase(),
                 ex.getMessage(),
@@ -82,7 +82,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiError> handleIllegalArgument(
             IllegalArgumentException ex, HttpServletRequest request) {
         log.warn("Invalid argument: {}", ex.getMessage());
-        ApiError apiError = new ApiError(
+        var apiError = new ApiError(
                 HttpStatus.BAD_REQUEST.value(),
                 HttpStatus.BAD_REQUEST.getReasonPhrase(),
                 ex.getMessage(),
@@ -102,7 +102,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiError> handleIllegalState(
             IllegalStateException ex, HttpServletRequest request) {
         log.warn("Illegal state: {}", ex.getMessage());
-        ApiError apiError = new ApiError(
+        var apiError = new ApiError(
                 HttpStatus.CONFLICT.value(),
                 HttpStatus.CONFLICT.getReasonPhrase(),
                 ex.getMessage(),
@@ -122,7 +122,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiError> handleGenericException(
             Exception ex, HttpServletRequest request) {
         log.error("Unexpected error: {}", ex.getMessage(), ex);
-        ApiError apiError = new ApiError(
+        var apiError = new ApiError(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
                 "An unexpected error occurred",

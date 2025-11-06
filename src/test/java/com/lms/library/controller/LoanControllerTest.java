@@ -1,8 +1,12 @@
 package com.lms.library.controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import com.lms.library.dto.LoanRequest;
-import com.lms.library.dto.LoanResponse;
-import com.lms.library.dto.LoanSummaryResponse;
 import com.lms.library.exception.ItemNotAvailableException;
 import com.lms.library.exception.ItemNotFoundException;
 import com.lms.library.exception.LoanNotFoundException;
@@ -12,22 +16,14 @@ import com.lms.library.model.Loan;
 import com.lms.library.model.LoanItem;
 import com.lms.library.model.Member;
 import com.lms.library.service.LoanService;
+import java.time.LocalDate;
+import java.util.List;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-import java.time.LocalDate;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 /**
  * Unit tests for LoanController.
@@ -80,7 +76,7 @@ class LoanControllerTest {
                     .thenReturn(testLoan);
 
             // When
-            ResponseEntity<LoanResponse> response = loanController.checkoutItems(1L, testLoanRequest);
+            var response = loanController.checkoutItems(1L, testLoanRequest);
 
             // Then
             assertAll(
@@ -158,11 +154,11 @@ class LoanControllerTest {
         @DisplayName("Should return list of loan summaries for member")
         void getMemberLoans_ShouldReturnLoanSummaries_WhenMemberExists() {
             // Given
-            List<Loan> loans = List.of(testLoan);
+            var loans = List.of(testLoan);
             when(loanService.getMemberLoans(1L)).thenReturn(loans);
 
             // When
-            ResponseEntity<List<LoanSummaryResponse>> response = loanController.getMemberLoans(1L);
+            var response = loanController.getMemberLoans(1L);
 
             // Then
             assertAll(
@@ -182,7 +178,7 @@ class LoanControllerTest {
             when(loanService.getMemberLoans(1L)).thenReturn(List.of());
 
             // When
-            ResponseEntity<List<LoanSummaryResponse>> response = loanController.getMemberLoans(1L);
+            var response = loanController.getMemberLoans(1L);
 
             // Then
             assertAll(
@@ -223,7 +219,7 @@ class LoanControllerTest {
             when(loanService.getLoanById(1L)).thenReturn(testLoan);
 
             // When
-            ResponseEntity<LoanResponse> response = loanController.getLoan(1L);
+            var response = loanController.getLoan(1L);
 
             // Then
             assertAll(
@@ -265,13 +261,13 @@ class LoanControllerTest {
         @DisplayName("Should return specific items and update loan status")
         void returnItems_ShouldReturnSpecificItems_WhenSuccessful() {
             // Given
-            LoanRequest returnRequest = new LoanRequest(List.of(1L));
-            Loan returnedLoan = createReturnedLoan();
+            var returnRequest = new LoanRequest(List.of(1L));
+            var returnedLoan = createReturnedLoan();
 
             when(loanService.returnItems(1L, List.of(1L))).thenReturn(returnedLoan);
 
             // When
-            ResponseEntity<LoanResponse> response = loanController.returnItems(1L, returnRequest);
+            var response = loanController.returnItems(1L, returnRequest);
 
             // Then
             assertAll(
@@ -291,14 +287,14 @@ class LoanControllerTest {
         @DisplayName("Should return all items when no specific items provided")
         void returnItems_ShouldReturnAllItems_WhenNoItemsSpecified() {
             // Given
-            Loan returnedLoan = createReturnedLoan();
+            var returnedLoan = createReturnedLoan();
 
             when(loanService.returnItems(any(), anyList())).thenReturn(returnedLoan);
 
             var returnRequest = new LoanRequest(List.of(1L, 2L));
 
             // When
-            ResponseEntity<LoanResponse> response = loanController.returnItems(1L, returnRequest);
+            var response = loanController.returnItems(1L, returnRequest);
 
             // Then
             assertAll(
@@ -313,7 +309,7 @@ class LoanControllerTest {
         @DisplayName("Should propagate LoanNotFoundException when loan not found")
         void returnItems_ShouldThrowLoanNotFoundException_WhenLoanNotFound() {
             // Given
-            LoanRequest returnRequest = new LoanRequest(List.of(1L));
+            var returnRequest = new LoanRequest(List.of(1L));
             when(loanService.returnItems(anyLong(), any()))
                     .thenThrow(new LoanNotFoundException("Loan not found"));
 
@@ -331,7 +327,7 @@ class LoanControllerTest {
         @DisplayName("Should propagate ItemNotFoundException when item not found in loan")
         void returnItems_ShouldThrowItemNotFoundException_WhenItemNotInLoan() {
             // Given
-            LoanRequest returnRequest = new LoanRequest(List.of(999L));
+            var returnRequest = new LoanRequest(List.of(999L));
             when(loanService.returnItems(anyLong(), any()))
                     .thenThrow(new ItemNotFoundException("Item not found in loan"));
 
@@ -346,7 +342,7 @@ class LoanControllerTest {
         }
 
         private Loan createReturnedLoan() {
-            Loan returnedLoan = new Loan(testMember, LocalDate.now(), LocalDate.now().plusDays(14));
+            var returnedLoan = new Loan(testMember, LocalDate.now(), LocalDate.now().plusDays(14));
             returnedLoan.setId(1L);
 
             var loanItem = new LoanItem(returnedLoan, new Book("Clean Code", "Robert C. Martin",
@@ -371,12 +367,12 @@ class LoanControllerTest {
         @DisplayName("Should handle loan with single item")
         void checkoutItems_ShouldHandleSingleItem_WhenSuccessful() {
             // Given
-            LoanRequest singleItemRequest = new LoanRequest(List.of(1L));
+            var singleItemRequest = new LoanRequest(List.of(1L));
             when(loanService.checkoutItems(anyLong(), any(LoanRequest.class)))
                     .thenReturn(testLoan);
 
             // When
-            ResponseEntity<LoanResponse> response = loanController.checkoutItems(1L, singleItemRequest);
+            var response = loanController.checkoutItems(1L, singleItemRequest);
 
             // Then
             assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -387,12 +383,12 @@ class LoanControllerTest {
         @DisplayName("Should handle loan with multiple items")
         void checkoutItems_ShouldHandleMultipleItems_WhenSuccessful() {
             // Given
-            LoanRequest multipleItemsRequest = new LoanRequest(List.of(1L, 2L, 3L));
+            var multipleItemsRequest = new LoanRequest(List.of(1L, 2L, 3L));
             when(loanService.checkoutItems(anyLong(), any(LoanRequest.class)))
                     .thenReturn(testLoan);
 
             // When
-            ResponseEntity<LoanResponse> response = loanController.checkoutItems(1L, multipleItemsRequest);
+            var response = loanController.checkoutItems(1L, multipleItemsRequest);
 
             // Then
             assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);

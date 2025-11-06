@@ -14,12 +14,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * REST controller for managing loan operations in the Library Management System.
@@ -89,14 +88,14 @@ public class LoanController {
             @Valid @RequestBody LoanRequest loanRequest) {
 
         log.info("Checkout request for member {}: {} items", memberId, loanRequest.items().size());
-        Loan loan = loanService.checkoutItems(memberId, loanRequest);
+        var loan = loanService.checkoutItems(memberId, loanRequest);
 
         // Convert to response
-        List<LoanItemResponse> itemResponses = loan.getItems().stream()
+        var itemResponses = loan.getItems().stream()
                 .map(LoanItemResponse::from)
                 .toList();
 
-        LoanResponse response = new LoanResponse(
+        var response = new LoanResponse(
                 loan.getId(),
                 loan.getMember().getId(),
                 loan.getLoanDate(),
@@ -136,7 +135,7 @@ public class LoanController {
         log.info("Fetching loans for member {}", memberId);
         List<Loan> loans = loanService.getMemberLoans(memberId);
 
-        List<LoanSummaryResponse> responses = loans.stream()
+        var responses = loans.stream()
                 .map(loan -> new LoanSummaryResponse(
                         loan.getId(),
                         loan.getLoanDate(),
@@ -174,13 +173,13 @@ public class LoanController {
     @GetMapping("/loans/{loanId}")
     public ResponseEntity<LoanResponse> getLoan(@PathVariable Long loanId) {
         log.info("Fetching loan details for loan {}", loanId);
-        Loan loan = loanService.getLoanById(loanId);
+        var loan = loanService.getLoanById(loanId);
 
-        List<LoanItemResponse> itemResponses = loan.getItems().stream()
+        var itemResponses = loan.getItems().stream()
                 .map(LoanItemResponse::from)
                 .toList();
 
-        LoanResponse response = new LoanResponse(
+        var response = new LoanResponse(
                 loan.getId(),
                 loan.getMember().getId(),
                 loan.getLoanDate(),
@@ -239,11 +238,11 @@ public class LoanController {
         var returnedLoan = loanService.returnItems(loanId, returnRequest.items());
 
         // Convert to response
-        List<LoanItemResponse> itemResponses = returnedLoan.getItems().stream()
+        var itemResponses = returnedLoan.getItems().stream()
                 .map(LoanItemResponse::from)
                 .toList();
 
-        LoanResponse response = new LoanResponse(
+        var response = new LoanResponse(
                 returnedLoan.getId(),
                 returnedLoan.getMember().getId(),
                 returnedLoan.getLoanDate(),

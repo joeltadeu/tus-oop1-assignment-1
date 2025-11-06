@@ -1,5 +1,11 @@
 package com.lms.library.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
 import com.lms.library.dto.LoanRequest;
 import com.lms.library.exception.ItemNotAvailableException;
 import com.lms.library.exception.ItemNotFoundException;
@@ -7,6 +13,9 @@ import com.lms.library.exception.LoanNotFoundException;
 import com.lms.library.exception.MemberNotFoundException;
 import com.lms.library.model.*;
 import com.lms.library.repository.*;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -17,16 +26,6 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 /**
  * Unit tests for LoanServiceImpl.
@@ -105,7 +104,7 @@ class LoanServiceImplTest {
             when(loanRepository.save(any(Loan.class))).thenReturn(existingLoan);
 
             // When
-            Loan result = loanService.checkoutItems(1L, validLoanRequest);
+            var result = loanService.checkoutItems(1L, validLoanRequest);
 
             // Then
             assertAll(
@@ -148,7 +147,7 @@ class LoanServiceImplTest {
             when(libraryItemRepository.findAvailableItemById(999L)).thenReturn(Optional.empty());
             when(libraryItemRepository.findById(999L)).thenReturn(Optional.empty());
 
-            LoanRequest requestWithInvalidItem = new LoanRequest(List.of(999L));
+            var requestWithInvalidItem = new LoanRequest(List.of(999L));
 
             // When & Then
             assertThatThrownBy(() -> loanService.checkoutItems(1L, requestWithInvalidItem))
@@ -168,7 +167,7 @@ class LoanServiceImplTest {
             when(libraryItemRepository.findAvailableItemById(3L)).thenReturn(Optional.empty());
             when(libraryItemRepository.findById(3L)).thenReturn(Optional.of(unavailableBook));
 
-            LoanRequest requestWithUnavailableItem = new LoanRequest(List.of(3L));
+            var requestWithUnavailableItem = new LoanRequest(List.of(3L));
 
             // When & Then
             assertThatThrownBy(() -> loanService.checkoutItems(1L, requestWithUnavailableItem))
@@ -192,11 +191,11 @@ class LoanServiceImplTest {
                 return savedLoan;
             });
 
-            LocalDate expectedLoanDate = LocalDate.now();
-            LocalDate expectedReturnDate = expectedLoanDate.plusDays(14);
+            var expectedLoanDate = LocalDate.now();
+            var expectedReturnDate = expectedLoanDate.plusDays(14);
 
             // When
-            Loan result = loanService.checkoutItems(1L, new LoanRequest(List.of(1L)));
+            var result = loanService.checkoutItems(1L, new LoanRequest(List.of(1L)));
 
             // Then
             assertAll(
@@ -205,7 +204,7 @@ class LoanServiceImplTest {
             );
 
             verify(loanRepository).save(loanCaptor.capture());
-            Loan capturedLoan = loanCaptor.getValue();
+            var capturedLoan = loanCaptor.getValue();
             assertThat(capturedLoan.getLoanDate()).isEqualTo(expectedLoanDate);
             assertThat(capturedLoan.getExpectedReturnDate()).isEqualTo(expectedReturnDate);
         }
@@ -227,10 +226,10 @@ class LoanServiceImplTest {
 
             // Then
             verify(loanItemRepository).saveAll(loanItemsCaptor.capture());
-            List<LoanItem> capturedLoanItems = loanItemsCaptor.getValue();
+            var capturedLoanItems = loanItemsCaptor.getValue();
 
             verify(loanRepository).save(loanCaptor.capture());
-            Loan capturedLoan = loanCaptor.getValue();
+            var capturedLoan = loanCaptor.getValue();
 
             assertAll(
                     () -> assertThat(capturedLoanItems).hasSize(2),
@@ -255,7 +254,7 @@ class LoanServiceImplTest {
                     .thenReturn(List.of(existingLoan));
 
             // When
-            List<Loan> result = loanService.getMemberLoans(1L);
+            var result = loanService.getMemberLoans(1L);
 
             // Then
             assertAll(
@@ -276,7 +275,7 @@ class LoanServiceImplTest {
             when(loanRepository.findByMemberIdOrderByLoanDateDesc(1L)).thenReturn(List.of());
 
             // When
-            List<Loan> result = loanService.getMemberLoans(1L);
+            var result = loanService.getMemberLoans(1L);
 
             // Then
             assertThat(result).isEmpty();
@@ -312,7 +311,7 @@ class LoanServiceImplTest {
             when(loanRepository.findByIdWithMemberAndItems(1L)).thenReturn(Optional.of(existingLoan));
 
             // When
-            Loan result = loanService.getLoanById(1L);
+            var result = loanService.getLoanById(1L);
 
             // Then
             assertThat(result).isEqualTo(existingLoan);
@@ -364,7 +363,7 @@ class LoanServiceImplTest {
             when(loanRepository.save(any(Loan.class))).thenReturn(existingLoan);
 
             // When
-            Loan result = loanService.returnItems(1L, List.of(2L));
+            var result = loanService.returnItems(1L, List.of(2L));
 
             // Then
             assertAll(
@@ -439,7 +438,7 @@ class LoanServiceImplTest {
             when(loanRepository.save(any(Loan.class))).thenReturn(existingLoan);
 
             // When
-            Loan result = loanService.returnItems(1L, List.of(1L));
+            var result = loanService.returnItems(1L, List.of(1L));
 
             // Then
             assertThat(result).isNotNull();
@@ -453,12 +452,12 @@ class LoanServiceImplTest {
         @DisplayName("Should update loan status to CLOSED when all items are returned")
         void returnItems_ShouldUpdateStatusToClosed_WhenAllItemsReturned() {
             // Given
-            Loan loanWithAllItemsReturnable = new Loan(testMember, LocalDate.now(), LocalDate.now().plusDays(14));
+            var loanWithAllItemsReturnable = new Loan(testMember, LocalDate.now(), LocalDate.now().plusDays(14));
             loanWithAllItemsReturnable.setId(2L);
 
-            LoanItem item1 = new LoanItem(loanWithAllItemsReturnable, availableBook);
+            var item1 = new LoanItem(loanWithAllItemsReturnable, availableBook);
             item1.setId(1L);
-            LoanItem item2 = new LoanItem(loanWithAllItemsReturnable, availableJournal);
+            var item2 = new LoanItem(loanWithAllItemsReturnable, availableJournal);
             item2.setId(2L);
 
             loanWithAllItemsReturnable.addItem(item1);
@@ -470,7 +469,7 @@ class LoanServiceImplTest {
             when(loanRepository.save(any(Loan.class))).thenReturn(loanWithAllItemsReturnable);
 
             // When
-            Loan result = loanService.returnItems(2L, List.of(1L, 2L));
+            var result = loanService.returnItems(2L, List.of(1L, 2L));
 
             // Then
             assertThat(result.getStatus()).isEqualTo(LoanStatus.CLOSED);
@@ -488,13 +487,13 @@ class LoanServiceImplTest {
         @DisplayName("Should handle single item checkout correctly")
         void checkoutItems_ShouldHandleSingleItem_WhenSuccessful() {
             // Given
-            LoanRequest singleItemRequest = new LoanRequest(List.of(1L));
+            var singleItemRequest = new LoanRequest(List.of(1L));
             when(memberRepository.findById(1L)).thenReturn(Optional.of(testMember));
             when(libraryItemRepository.findAvailableItemById(1L)).thenReturn(Optional.of(availableBook));
             when(loanRepository.save(any(Loan.class))).thenReturn(existingLoan);
 
             // When
-            Loan result = loanService.checkoutItems(1L, singleItemRequest);
+            var result = loanService.checkoutItems(1L, singleItemRequest);
 
             // Then
             assertThat(result).isNotNull();
@@ -505,7 +504,7 @@ class LoanServiceImplTest {
         @DisplayName("Should handle multiple items checkout correctly")
         void checkoutItems_ShouldHandleMultipleItems_WhenSuccessful() {
             // Given
-            LoanRequest multipleItemsRequest = new LoanRequest(List.of(1L, 2L, 3L));
+            var multipleItemsRequest = new LoanRequest(List.of(1L, 2L, 3L));
             when(memberRepository.findById(1L)).thenReturn(Optional.of(testMember));
             when(libraryItemRepository.findAvailableItemById(1L)).thenReturn(Optional.of(availableBook));
             when(libraryItemRepository.findAvailableItemById(2L)).thenReturn(Optional.of(availableJournal));
@@ -513,7 +512,7 @@ class LoanServiceImplTest {
             when(loanRepository.save(any(Loan.class))).thenReturn(existingLoan);
 
             // When
-            Loan result = loanService.checkoutItems(1L, multipleItemsRequest);
+            var result = loanService.checkoutItems(1L, multipleItemsRequest);
 
             // Then
             assertThat(result).isNotNull();

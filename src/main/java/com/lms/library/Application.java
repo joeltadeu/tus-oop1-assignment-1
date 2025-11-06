@@ -14,6 +14,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class Application {
 
+    /**
+     * Default constructor for Application.
+     * Required for serialization and dependency injection frameworks.
+     */
+    Application() {}
+
     void main() {
         SpringApplication.run(Application.class);
     }

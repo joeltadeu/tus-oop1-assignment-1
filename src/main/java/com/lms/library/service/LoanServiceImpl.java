@@ -10,12 +10,11 @@ import com.lms.library.repository.LibraryItemRepository;
 import com.lms.library.repository.LoanItemRepository;
 import com.lms.library.repository.LoanRepository;
 import com.lms.library.repository.MemberRepository;
+import java.time.LocalDate;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
-import java.util.List;
 
 /**
  * Implementation of the LoanService interface.
@@ -39,10 +38,10 @@ public class LoanServiceImpl implements LoanService {
     /**
      * Constructs a new LoanServiceImpl with required dependencies.
      *
-     * @param memberRepository repository for member operations
+     * @param memberRepository      repository for member operations
      * @param libraryItemRepository repository for library item operations
-     * @param loanRepository repository for loan operations
-     * @param loanItemRepository repository for loan item operations
+     * @param loanRepository        repository for loan operations
+     * @param loanItemRepository    repository for loan item operations
      */
     public LoanServiceImpl(MemberRepository memberRepository, LibraryItemRepository libraryItemRepository, LoanRepository loanRepository, LoanItemRepository loanItemRepository) {
         this.memberRepository = memberRepository;
@@ -56,20 +55,19 @@ public class LoanServiceImpl implements LoanService {
      */
     @Override
     public Loan checkoutItems(Long memberId, LoanRequest loanRequest) {
-        Member member = memberRepository.findById(memberId)
+        var member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberNotFoundException("Member not found with ID: " + memberId));
 
-        LocalDate loanDate = LocalDate.now();
-        LocalDate expectedReturnDate = loanDate.plusDays(14);
-
-        Loan loan = new Loan(member, loanDate, expectedReturnDate);
+        var loanDate = LocalDate.now();
+        var expectedReturnDate = loanDate.plusDays(14);
+        var loan = new Loan(member, loanDate, expectedReturnDate);
 
         for (Long itemId : loanRequest.items()) {
             // Use the available item query to avoid proxy issues
-            LibraryItem item = libraryItemRepository.findAvailableItemById(itemId)
+            var item = libraryItemRepository.findAvailableItemById(itemId)
                     .orElseThrow(() -> {
                         // If item exists but is not available
-                        LibraryItem unavailableItem = libraryItemRepository.findById(itemId)
+                        var unavailableItem = libraryItemRepository.findById(itemId)
                                 .orElseThrow(() -> new ItemNotFoundException("Item not found with ID: " + itemId));
                         return new ItemNotAvailableException(
                                 "Item '" + unavailableItem.getTitle() + "' is currently loaned out"
@@ -85,7 +83,7 @@ public class LoanServiceImpl implements LoanService {
             log.info("Added item {} to loan for member {}", itemId, memberId);
         }
 
-        Loan savedLoan = loanRepository.save(loan);
+        var savedLoan = loanRepository.save(loan);
         loanItemRepository.saveAll(loan.getItems());
 
         log.info("Created loan {} with {} items for member {}",
@@ -120,7 +118,7 @@ public class LoanServiceImpl implements LoanService {
      */
     @Override
     public Loan returnItems(Long loanId, List<Long> itemIds) {
-        Loan loan = loanRepository.findByIdWithItems(loanId)
+        var loan = loanRepository.findByIdWithItems(loanId)
                 .orElseThrow(() -> new LoanNotFoundException("Loan not found with ID: " + loanId));
 
         if (loan.getStatus() == LoanStatus.CLOSED) {
@@ -128,7 +126,7 @@ public class LoanServiceImpl implements LoanService {
         }
 
         for (Long itemId : itemIds) {
-            LoanItem loanItem = loanItemRepository.findByLoanIdAndItemId(loanId, itemId)
+            var loanItem = loanItemRepository.findByLoanIdAndItemId(loanId, itemId)
                     .orElseThrow(() -> new ItemNotFoundException(
                             "Item " + itemId + " not found in loan " + loanId));
 

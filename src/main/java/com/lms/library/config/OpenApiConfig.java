@@ -6,11 +6,10 @@ import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
 import io.swagger.v3.oas.annotations.servers.Server;
 import io.swagger.v3.oas.models.media.Schema;
-import org.springdoc.core.utils.SpringDocUtils;
-import org.springframework.context.annotation.Configuration;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import org.springdoc.core.utils.SpringDocUtils;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * Configuration class for OpenAPI/Swagger documentation.

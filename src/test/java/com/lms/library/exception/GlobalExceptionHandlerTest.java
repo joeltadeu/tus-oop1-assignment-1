@@ -1,5 +1,9 @@
 package com.lms.library.exception;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
+
+import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
@@ -7,12 +11,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-import jakarta.servlet.http.HttpServletRequest;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
 
 /**
  * Unit tests for GlobalExceptionHandler class
@@ -42,16 +40,16 @@ class GlobalExceptionHandlerTest {
         when(request.getRequestURI()).thenReturn("/api/test-endpoint");
 
         // Arrange
-        MemberNotFoundException ex = new MemberNotFoundException("Member with id 123 not found");
+        var ex = new MemberNotFoundException("Member with id 123 not found");
 
         // Act
-        ResponseEntity<ApiError> response = exceptionHandler.handleNotFoundExceptions(ex, request);
+        var response = exceptionHandler.handleNotFoundExceptions(ex, request);
 
         // Assert
         assertNotNull(response);
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 
-        ApiError apiError = response.getBody();
+        var apiError = response.getBody();
         assertNotNull(apiError);
         assertEquals(HttpStatus.NOT_FOUND.value(), apiError.status());
         assertEquals(HttpStatus.NOT_FOUND.getReasonPhrase(), apiError.error());
@@ -66,16 +64,16 @@ class GlobalExceptionHandlerTest {
         when(request.getRequestURI()).thenReturn("/api/test-endpoint");
 
         // Arrange
-        ItemNotFoundException ex = new ItemNotFoundException("Item with id 456 not found");
+        var ex = new ItemNotFoundException("Item with id 456 not found");
 
         // Act
-        ResponseEntity<ApiError> response = exceptionHandler.handleNotFoundExceptions(ex, request);
+        var response = exceptionHandler.handleNotFoundExceptions(ex, request);
 
         // Assert
         assertNotNull(response);
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 
-        ApiError apiError = response.getBody();
+        var apiError = response.getBody();
         assertNotNull(apiError);
         assertEquals(HttpStatus.NOT_FOUND.value(), apiError.status());
         assertEquals(HttpStatus.NOT_FOUND.getReasonPhrase(), apiError.error());
@@ -90,16 +88,16 @@ class GlobalExceptionHandlerTest {
         when(request.getRequestURI()).thenReturn("/api/test-endpoint");
 
         // Arrange
-        LoanNotFoundException ex = new LoanNotFoundException("Loan with id 789 not found");
+        var ex = new LoanNotFoundException("Loan with id 789 not found");
 
         // Act
-        ResponseEntity<ApiError> response = exceptionHandler.handleNotFoundExceptions(ex, request);
+        var response = exceptionHandler.handleNotFoundExceptions(ex, request);
 
         // Assert
         assertNotNull(response);
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 
-        ApiError apiError = response.getBody();
+        var apiError = response.getBody();
         assertNotNull(apiError);
         assertEquals(HttpStatus.NOT_FOUND.value(), apiError.status());
         assertEquals(HttpStatus.NOT_FOUND.getReasonPhrase(), apiError.error());
@@ -114,16 +112,16 @@ class GlobalExceptionHandlerTest {
         when(request.getRequestURI()).thenReturn("/api/test-endpoint");
 
         // Arrange
-        ItemNotAvailableException ex = new ItemNotAvailableException("Item is currently on loan");
+        var ex = new ItemNotAvailableException("Item is currently on loan");
 
         // Act
-        ResponseEntity<ApiError> response = exceptionHandler.handleItemNotAvailable(ex, request);
+        var response = exceptionHandler.handleItemNotAvailable(ex, request);
 
         // Assert
         assertNotNull(response);
         assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
 
-        ApiError apiError = response.getBody();
+        var apiError = response.getBody();
         assertNotNull(apiError);
         assertEquals(HttpStatus.CONFLICT.value(), apiError.status());
         assertEquals(HttpStatus.CONFLICT.getReasonPhrase(), apiError.error());
@@ -138,16 +136,16 @@ class GlobalExceptionHandlerTest {
         when(request.getRequestURI()).thenReturn("/api/test-endpoint");
 
         // Arrange
-        IllegalArgumentException ex = new IllegalArgumentException("Invalid parameter provided");
+        var ex = new IllegalArgumentException("Invalid parameter provided");
 
         // Act
-        ResponseEntity<ApiError> response = exceptionHandler.handleIllegalArgument(ex, request);
+        var response = exceptionHandler.handleIllegalArgument(ex, request);
 
         // Assert
         assertNotNull(response);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 
-        ApiError apiError = response.getBody();
+        var apiError = response.getBody();
         assertNotNull(apiError);
         assertEquals(HttpStatus.BAD_REQUEST.value(), apiError.status());
         assertEquals(HttpStatus.BAD_REQUEST.getReasonPhrase(), apiError.error());
@@ -162,16 +160,16 @@ class GlobalExceptionHandlerTest {
         when(request.getRequestURI()).thenReturn("/api/test-endpoint");
 
         // Arrange
-        IllegalStateException ex = new IllegalStateException("Loan cannot be processed in current state");
+        var ex = new IllegalStateException("Loan cannot be processed in current state");
 
         // Act
-        ResponseEntity<ApiError> response = exceptionHandler.handleIllegalState(ex, request);
+        var response = exceptionHandler.handleIllegalState(ex, request);
 
         // Assert
         assertNotNull(response);
         assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
 
-        ApiError apiError = response.getBody();
+        var apiError = response.getBody();
         assertNotNull(apiError);
         assertEquals(HttpStatus.CONFLICT.value(), apiError.status());
         assertEquals(HttpStatus.CONFLICT.getReasonPhrase(), apiError.error());
@@ -186,16 +184,16 @@ class GlobalExceptionHandlerTest {
         when(request.getRequestURI()).thenReturn("/api/test-endpoint");
 
         // Arrange
-        Exception ex = new Exception("Unexpected database error");
+        var ex = new Exception("Unexpected database error");
 
         // Act
-        ResponseEntity<ApiError> response = exceptionHandler.handleGenericException(ex, request);
+        var response = exceptionHandler.handleGenericException(ex, request);
 
         // Assert
         assertNotNull(response);
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
 
-        ApiError apiError = response.getBody();
+        var apiError = response.getBody();
         assertNotNull(apiError);
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), apiError.status());
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), apiError.error());
@@ -210,16 +208,16 @@ class GlobalExceptionHandlerTest {
         when(request.getRequestURI()).thenReturn("/api/test-endpoint");
 
         // Arrange
-        Exception ex = new Exception();
+        var ex = new Exception();
 
         // Act
-        ResponseEntity<ApiError> response = exceptionHandler.handleGenericException(ex, request);
+        var response = exceptionHandler.handleGenericException(ex, request);
 
         // Assert
         assertNotNull(response);
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
 
-        ApiError apiError = response.getBody();
+        var apiError = response.getBody();
         assertNotNull(apiError);
         assertEquals("An unexpected error occurred", apiError.message());
     }
@@ -231,16 +229,16 @@ class GlobalExceptionHandlerTest {
         when(request.getRequestURI()).thenReturn("/api/test-endpoint");
 
         // Arrange
-        RuntimeException ex = new RuntimeException("Runtime error occurred");
+        var ex = new RuntimeException("Runtime error occurred");
 
         // Act
-        ResponseEntity<ApiError> response = exceptionHandler.handleGenericException(ex, request);
+        var response = exceptionHandler.handleGenericException(ex, request);
 
         // Assert
         assertNotNull(response);
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
 
-        ApiError apiError = response.getBody();
+        var apiError = response.getBody();
         assertNotNull(apiError);
         assertEquals("An unexpected error occurred", apiError.message());
     }
@@ -253,14 +251,14 @@ class GlobalExceptionHandlerTest {
 
         // Arrange
         when(request.getRequestURI()).thenReturn("/api/members/123");
-        MemberNotFoundException ex = new MemberNotFoundException("Member not found");
+        var ex = new MemberNotFoundException("Member not found");
 
         // Act
-        ResponseEntity<ApiError> response = exceptionHandler.handleNotFoundExceptions(ex, request);
+        var response = exceptionHandler.handleNotFoundExceptions(ex, request);
 
         // Assert
         assertNotNull(response);
-        ApiError apiError = response.getBody();
+        var apiError = response.getBody();
         assertNotNull(apiError);
         assertEquals("/api/members/123", apiError.path());
     }
@@ -272,16 +270,16 @@ class GlobalExceptionHandlerTest {
         when(request.getRequestURI()).thenReturn("/api/test-endpoint");
 
         // Arrange
-        MemberNotFoundException ex = new MemberNotFoundException("");
+        var ex = new MemberNotFoundException("");
 
         // Act
-        ResponseEntity<ApiError> response = exceptionHandler.handleNotFoundExceptions(ex, request);
+        var response = exceptionHandler.handleNotFoundExceptions(ex, request);
 
         // Assert
         assertNotNull(response);
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 
-        ApiError apiError = response.getBody();
+        var apiError = response.getBody();
         assertNotNull(apiError);
         assertEquals("", apiError.message());
     }
@@ -293,16 +291,16 @@ class GlobalExceptionHandlerTest {
         when(request.getRequestURI()).thenReturn("/api/test-endpoint");
 
         // Arrange
-        MemberNotFoundException ex = new MemberNotFoundException(null);
+        var ex = new MemberNotFoundException(null);
 
         // Act
-        ResponseEntity<ApiError> response = exceptionHandler.handleNotFoundExceptions(ex, request);
+        var response = exceptionHandler.handleNotFoundExceptions(ex, request);
 
         // Assert
         assertNotNull(response);
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 
-        ApiError apiError = response.getBody();
+        var apiError = response.getBody();
         assertNotNull(apiError);
         assertNull(apiError.message());
     }
@@ -314,14 +312,14 @@ class GlobalExceptionHandlerTest {
         when(request.getRequestURI()).thenReturn("/api/test-endpoint");
 
         // Arrange
-        MemberNotFoundException memberEx = new MemberNotFoundException("Member not found");
-        ItemNotFoundException itemEx = new ItemNotFoundException("Item not found");
-        LoanNotFoundException loanEx = new LoanNotFoundException("Loan not found");
+        var memberEx = new MemberNotFoundException("Member not found");
+        var itemEx = new ItemNotFoundException("Item not found");
+        var loanEx = new LoanNotFoundException("Loan not found");
 
         // Act & Assert - All should return 404
-        ResponseEntity<ApiError> memberResponse = exceptionHandler.handleNotFoundExceptions(memberEx, request);
-        ResponseEntity<ApiError> itemResponse = exceptionHandler.handleNotFoundExceptions(itemEx, request);
-        ResponseEntity<ApiError> loanResponse = exceptionHandler.handleNotFoundExceptions(loanEx, request);
+        var memberResponse = exceptionHandler.handleNotFoundExceptions(memberEx, request);
+        var itemResponse = exceptionHandler.handleNotFoundExceptions(itemEx, request);
+        var loanResponse = exceptionHandler.handleNotFoundExceptions(loanEx, request);
 
         assertEquals(HttpStatus.NOT_FOUND, memberResponse.getStatusCode());
         assertEquals(HttpStatus.NOT_FOUND, itemResponse.getStatusCode());
@@ -335,14 +333,14 @@ class GlobalExceptionHandlerTest {
         when(request.getRequestURI()).thenReturn("/api/test-endpoint");
 
         // Arrange
-        ItemNotAvailableException notAvailableEx = new ItemNotAvailableException("Item on loan");
-        IllegalStateException illegalStateEx = new IllegalStateException("Invalid state");
-        IllegalArgumentException illegalArgEx = new IllegalArgumentException("Invalid argument");
+        var notAvailableEx = new ItemNotAvailableException("Item on loan");
+        var illegalStateEx = new IllegalStateException("Invalid state");
+        var illegalArgEx = new IllegalArgumentException("Invalid argument");
 
         // Act & Assert
-        ResponseEntity<ApiError> notAvailableResponse = exceptionHandler.handleItemNotAvailable(notAvailableEx, request);
-        ResponseEntity<ApiError> illegalStateResponse = exceptionHandler.handleIllegalState(illegalStateEx, request);
-        ResponseEntity<ApiError> illegalArgResponse = exceptionHandler.handleIllegalArgument(illegalArgEx, request);
+        var notAvailableResponse = exceptionHandler.handleItemNotAvailable(notAvailableEx, request);
+        var illegalStateResponse = exceptionHandler.handleIllegalState(illegalStateEx, request);
+        var illegalArgResponse = exceptionHandler.handleIllegalArgument(illegalArgEx, request);
 
         assertEquals(HttpStatus.CONFLICT, notAvailableResponse.getStatusCode());
         assertEquals(HttpStatus.CONFLICT, illegalStateResponse.getStatusCode());
@@ -356,17 +354,17 @@ class GlobalExceptionHandlerTest {
         when(request.getRequestURI()).thenReturn("/api/test-endpoint");
 
         // Arrange
-        Exception cause = new RuntimeException("Root cause");
-        Exception ex = new Exception("Wrapper exception", cause);
+        var cause = new RuntimeException("Root cause");
+        var ex = new Exception("Wrapper exception", cause);
 
         // Act
-        ResponseEntity<ApiError> response = exceptionHandler.handleGenericException(ex, request);
+        var response = exceptionHandler.handleGenericException(ex, request);
 
         // Assert
         assertNotNull(response);
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
 
-        ApiError apiError = response.getBody();
+        var apiError = response.getBody();
         assertNotNull(apiError);
         assertEquals("An unexpected error occurred", apiError.message());
     }
@@ -378,7 +376,7 @@ class GlobalExceptionHandlerTest {
         assertNotNull(exceptionHandler);
 
         // Verify it has the default constructor
-        GlobalExceptionHandler handler = new GlobalExceptionHandler();
+        var handler = new GlobalExceptionHandler();
         assertNotNull(handler);
     }
 }
