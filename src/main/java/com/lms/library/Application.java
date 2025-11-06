@@ -12,7 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @since 2025
  */
 @SpringBootApplication
-class Application {
+public class Application {
 
     void main() {
         SpringApplication.run(Application.class);

@@ -103,7 +103,6 @@ class LoanServiceImplTest {
             when(libraryItemRepository.findAvailableItemById(1L)).thenReturn(Optional.of(availableBook));
             when(libraryItemRepository.findAvailableItemById(2L)).thenReturn(Optional.of(availableJournal));
             when(loanRepository.save(any(Loan.class))).thenReturn(existingLoan);
-            when(memberRepository.save(any(Member.class))).thenReturn(testMember);
 
             // When
             Loan result = loanService.checkoutItems(1L, validLoanRequest);
@@ -120,7 +119,6 @@ class LoanServiceImplTest {
             verify(libraryItemRepository).findAvailableItemById(2L);
             verify(loanRepository).save(any(Loan.class));
             verify(loanItemRepository).saveAll(anyList());
-            verify(memberRepository).save(testMember);
 
             // Verify items were marked as unavailable
             assertThat(availableBook.isAvailable()).isFalse();
@@ -193,7 +191,6 @@ class LoanServiceImplTest {
                 savedLoan.setId(1L);
                 return savedLoan;
             });
-            when(memberRepository.save(any(Member.class))).thenReturn(testMember);
 
             LocalDate expectedLoanDate = LocalDate.now();
             LocalDate expectedReturnDate = expectedLoanDate.plusDays(14);
@@ -225,10 +222,8 @@ class LoanServiceImplTest {
                 loan.setId(1L);
                 return loan;
             });
-            when(memberRepository.save(any(Member.class))).thenReturn(testMember);
 
-            // When
-            var savedLoan = loanService.checkoutItems(1L, validLoanRequest);
+            loanService.checkoutItems(1L, validLoanRequest);
 
             // Then
             verify(loanItemRepository).saveAll(loanItemsCaptor.capture());
@@ -497,7 +492,6 @@ class LoanServiceImplTest {
             when(memberRepository.findById(1L)).thenReturn(Optional.of(testMember));
             when(libraryItemRepository.findAvailableItemById(1L)).thenReturn(Optional.of(availableBook));
             when(loanRepository.save(any(Loan.class))).thenReturn(existingLoan);
-            when(memberRepository.save(any(Member.class))).thenReturn(testMember);
 
             // When
             Loan result = loanService.checkoutItems(1L, singleItemRequest);
@@ -517,7 +511,6 @@ class LoanServiceImplTest {
             when(libraryItemRepository.findAvailableItemById(2L)).thenReturn(Optional.of(availableJournal));
             when(libraryItemRepository.findAvailableItemById(3L)).thenReturn(Optional.of(availableBook));
             when(loanRepository.save(any(Loan.class))).thenReturn(existingLoan);
-            when(memberRepository.save(any(Member.class))).thenReturn(testMember);
 
             // When
             Loan result = loanService.checkoutItems(1L, multipleItemsRequest);

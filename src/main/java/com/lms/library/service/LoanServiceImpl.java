@@ -87,8 +87,6 @@ public class LoanServiceImpl implements LoanService {
 
         Loan savedLoan = loanRepository.save(loan);
         loanItemRepository.saveAll(loan.getItems());
-        member.addLoan(savedLoan);
-        memberRepository.save(member);
 
         log.info("Created loan {} with {} items for member {}",
                 savedLoan.getId(), loanRequest.items().size(), memberId);
